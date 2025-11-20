@@ -14,7 +14,7 @@ export const ACTIVITIES: Activity[] = [
   { id: 'exercise', icon: 'Dumbbell', label: 'Exercise' },
   { id: 'gaming', icon: 'Gamepad2', label: 'Gaming' },
   { id: 'reading', icon: 'BookOpen', label: 'Reading' },
-  { id: 'music', icon: 'Music', label: 'Music' },
+  { id: 'study', icon: 'GraduationCap', label: 'Study' },
   { id: 'sleep', icon: 'Moon', label: 'Sleep' },
   { id: 'outdoors', icon: 'Sun', label: 'Outdoors' },
   { id: 'social', icon: 'Users', label: 'Social' },

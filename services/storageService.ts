@@ -91,7 +91,7 @@ export const deleteEntry = async (id: string): Promise<void> => {
 const DEFAULT_GOALS: Goal[] = [
   { id: 'g1', text: 'Drink water' },
   { id: 'g2', text: 'Read 10 pages' },
-  { id: 'g3', text: 'Meditate' }
+  { id: 'g3', text: 'Walk 30 minutes' }
 ];
 
 export const getGoals = async (): Promise<Goal[]> => {
