@@ -12,22 +12,22 @@ export default defineConfig(({ mode }) => {
       react(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+        includeAssets: ['favicon.ico', 'icon.svg'],
         manifest: {
           name: 'MoodTrack AI',
           short_name: 'MoodTrack',
           description: 'A smart daily journal and mood tracker to help you reflect on your days and analyze emotional trends.',
-          theme_color: '#ffffff',
+          theme_color: '#6366f1',
+          background_color: '#ffffff',
+          display: 'standalone',
+          orientation: 'portrait',
+          start_url: '/',
           icons: [
             {
-              src: 'pwa-192x192.png',
-              sizes: '192x192',
-              type: 'image/png'
-            },
-            {
-              src: 'pwa-512x512.png',
-              sizes: '512x512',
-              type: 'image/png'
+              src: 'icon.svg',
+              sizes: 'any',
+              type: 'image/svg+xml',
+              purpose: 'any maskable'
             }
           ]
         },
@@ -51,8 +51,6 @@ export default defineConfig(({ mode }) => {
     base: '/',
     define: {
       // Safely polyfill process.env.API_KEY. 
-      // Using || '' ensures we replace with a string even if the env var is missing,
-      // preventing "process is not defined" runtime errors in the browser.
       'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
     },
   };
