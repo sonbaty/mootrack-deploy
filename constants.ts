@@ -1,18 +1,4 @@
 import { Activity, MoodLevel } from './types';
-import { 
-  Briefcase, 
-  Coffee, 
-  Dumbbell, 
-  Gamepad2, 
-  BookOpen, 
-  Music, 
-  Moon, 
-  Sun, 
-  Users, 
-  Utensils, 
-  ShoppingCart,
-  Tv
-} from 'lucide-react';
 
 export const MOODS = [
   { level: MoodLevel.AMAZING, emoji: '😄', color: 'bg-green-500', label: 'Amazing' },

@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { ArrowLeft, Flame, Trophy, Activity as ActivityIcon, Target } from 'lucide-react';
 import { JournalEntry, Goal } from '../types';
-import { ACTIVITIES, MOODS } from '../constants';
+import { ACTIVITIES } from '../constants';
 import { getGoals } from '../services/storageService';
 import {
   LineChart,
@@ -208,7 +208,7 @@ const Stats: React.FC<StatsProps> = ({ entries, onBack }) => {
                                 contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}}
                             />
                             <Bar dataKey="count" barSize={20} radius={[0, 4, 4, 0]}>
-                                {goalStats.map((entry, index) => (
+                                {goalStats.map((_entry, index) => (
                                     <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#818cf8' : '#a78bfa'} />
                                 ))}
                             </Bar>

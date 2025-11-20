@@ -1,6 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
-import { JournalEntry, MoodLevel } from "../types";
+import { MoodLevel } from "../types";
 import { ACTIVITIES, GEMINI_MODEL } from "../constants";
+
+// Polyfill for TypeScript to understand process.env in browser context
+declare const process: any;
 
 const getClient = () => {
   const apiKey = process.env.API_KEY;
