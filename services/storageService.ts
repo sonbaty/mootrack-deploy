@@ -146,3 +146,36 @@ export const deleteGoal = async (id: string): Promise<Goal[]> => {
   
   return getGoals();
 };
+
+// --- Data Management (Backup/Restore/Reset) ---
+
+export const clearDatabase = async (): Promise<void> => {
+    const db = await initDB();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['entries', 'goals'], 'readwrite');
+        
+        transaction.objectStore('entries').clear();
+        transaction.objectStore('goals').clear();
+        
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error);
+    });
+};
+
+export const importData = async (data: { entries: JournalEntry[], goals: Goal[] }): Promise<void> => {
+    const db = await initDB();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(['entries', 'goals'], 'readwrite');
+        const entriesStore = transaction.objectStore('entries');
+        const goalsStore = transaction.objectStore('goals');
+
+        // Clear existing data before import? 
+        // For this implementation, let's overwrite conflicts but keep non-conflicting
+        
+        data.entries.forEach(entry => entriesStore.put(entry));
+        data.goals.forEach(goal => goalsStore.put(goal));
+
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error);
+    });
+};

@@ -26,4 +26,4 @@ export interface JournalEntry {
   note: string;
 }
 
-export type ViewState = 'dashboard' | 'entry' | 'stats' | 'goals';
+export type ViewState = 'dashboard' | 'entry' | 'stats' | 'goals' | 'settings';

@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { Plus, BarChart3, CalendarDays, Target, CheckCircle2, Circle } from 'lucide-react';
+import { Plus, BarChart3, CalendarDays, Target, CheckCircle2, Circle, Settings } from 'lucide-react';
 import { JournalEntry, Goal } from '../types';
 import { MOODS } from '../constants';
 import { getGoals } from '../services/storageService';
@@ -10,9 +10,10 @@ interface DashboardProps {
   onViewStats: () => void;
   onEditEntry: (entry: JournalEntry) => void;
   onViewGoals: () => void;
+  onViewSettings: () => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ entries, onAddEntry, onViewStats, onEditEntry, onViewGoals }) => {
+const Dashboard: React.FC<DashboardProps> = ({ entries, onAddEntry, onViewStats, onEditEntry, onViewGoals, onViewSettings }) => {
   const [goals, setGoals] = useState<Goal[]>([]);
 
   useEffect(() => {
@@ -66,6 +67,13 @@ const Dashboard: React.FC<DashboardProps> = ({ entries, onAddEntry, onViewStats,
                 title="Statistics"
             >
                 <BarChart3 size={24} />
+            </button>
+            <button 
+                onClick={onViewSettings}
+                className="p-2 bg-slate-100 rounded-xl hover:bg-slate-200 transition-colors text-slate-600"
+                title="Settings"
+            >
+                <Settings size={24} />
             </button>
         </div>
       </header>

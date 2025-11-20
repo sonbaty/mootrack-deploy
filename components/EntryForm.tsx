@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Check, Calendar, Target, Trophy, CheckCheck } from 'lucide-react';
+import { ArrowLeft, Check, Calendar, Target, Trophy, CheckCheck, Sparkles, Loader2 } from 'lucide-react';
 import { JournalEntry, MoodLevel, Goal } from '../types';
 import { MOODS, ACTIVITIES } from '../constants';
 import { getGoals } from '../services/storageService';
+import { generateReflection } from '../services/geminiService';
 import confetti from 'canvas-confetti';
 import * as LucideIcons from 'lucide-react';
 
@@ -21,6 +22,7 @@ const EntryForm: React.FC<EntryFormProps> = ({ existingEntry, onSave, onBack, al
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [availableGoals, setAvailableGoals] = useState<Goal[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   
   useEffect(() => {
     const loadGoals = async () => {
@@ -74,6 +76,19 @@ const EntryForm: React.FC<EntryFormProps> = ({ existingEntry, onSave, onBack, al
     );
   };
 
+  const handleGenerateAI = async () => {
+    setIsGeneratingAI(true);
+    try {
+        const reflection = await generateReflection(mood, selectedActivities, note);
+        const newNote = note ? `${note}\n\n✨ AI Insight:\n${reflection}` : `✨ AI Insight:\n${reflection}`;
+        setNote(newNote);
+    } catch (e) {
+        setToastMessage("Failed to connect to AI");
+    } finally {
+        setIsGeneratingAI(false);
+    }
+  };
+
   const handleSave = () => {
     const entry: JournalEntry = {
       id: existingEntry ? existingEntry.id : crypto.randomUUID(),
@@ -96,9 +111,9 @@ const EntryForm: React.FC<EntryFormProps> = ({ existingEntry, onSave, onBack, al
     <div className="flex flex-col h-full bg-slate-50 relative">
         {/* Toast Notification */}
         {toastMessage && (
-            <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 animate-bounce">
-                <div className="bg-slate-800 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-medium">
-                    <Trophy size={16} className="text-yellow-400" />
+            <div className="fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 animate-bounce w-max max-w-[90%]">
+                <div className="bg-slate-800 text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-medium truncate">
+                    <Trophy size={16} className="text-yellow-400 shrink-0" />
                     {toastMessage}
                 </div>
             </div>
@@ -234,8 +249,22 @@ const EntryForm: React.FC<EntryFormProps> = ({ existingEntry, onSave, onBack, al
         </section>
 
         {/* Note Section */}
-        <section>
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Journal</h3>
+        <section className="relative">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider">Journal</h3>
+            <button 
+                onClick={handleGenerateAI}
+                disabled={isGeneratingAI}
+                className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full flex items-center gap-1 hover:bg-indigo-200 transition-colors disabled:opacity-50"
+            >
+                {isGeneratingAI ? (
+                    <Loader2 size={12} className="animate-spin" />
+                ) : (
+                    <Sparkles size={12} />
+                )}
+                {isGeneratingAI ? "Thinking..." : "AI Reflection"}
+            </button>
+          </div>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}

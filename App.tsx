@@ -3,6 +3,7 @@ import Dashboard from './components/Dashboard';
 import EntryForm from './components/EntryForm';
 import Stats from './components/Stats';
 import GoalsManager from './components/GoalsManager';
+import Settings from './components/Settings';
 import { JournalEntry, ViewState } from './types';
 import { getEntries, saveEntry } from './services/storageService';
 
@@ -89,6 +90,7 @@ const App: React.FC = () => {
           onViewStats={() => setCurrentView('stats')}
           onEditEntry={handleEditEntry}
           onViewGoals={() => setCurrentView('goals')}
+          onViewSettings={() => setCurrentView('settings')}
         />
       )}
       
@@ -110,6 +112,12 @@ const App: React.FC = () => {
 
       {currentView === 'goals' && (
         <GoalsManager 
+          onBack={() => setCurrentView('dashboard')}
+        />
+      )}
+
+      {currentView === 'settings' && (
+        <Settings 
           onBack={() => setCurrentView('dashboard')}
         />
       )}
