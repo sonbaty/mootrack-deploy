@@ -37,9 +37,14 @@ const Dashboard: React.FC<DashboardProps> = ({ entries, onAddEntry, onViewStats,
 
   const getMoodData = (level: number) => MOODS.find(m => m.level === level);
 
-  // Calculate Daily Progress
-  const todayEntry = sortedEntries.find(e => e.date.startsWith(today));
-  const completedTodayCount = todayEntry?.completedGoalIds?.length || 0;
+  // Calculate Daily Progress based on ALL entries for today
+  const todayEntries = sortedEntries.filter(e => e.date.startsWith(today));
+  const completedGoalIds = new Set<string>();
+  todayEntries.forEach(e => {
+    e.completedGoalIds?.forEach(id => completedGoalIds.add(id));
+  });
+  
+  const completedTodayCount = completedGoalIds.size;
   const totalGoals = goals.length;
   const progressPercentage = totalGoals > 0 ? Math.round((completedTodayCount / totalGoals) * 100) : 0;
 
@@ -91,7 +96,7 @@ const Dashboard: React.FC<DashboardProps> = ({ entries, onAddEntry, onViewStats,
                   Daily Goals
                 </h2>
                 <p className="text-xs text-indigo-100 opacity-90">
-                  {completedTodayCount === totalGoals 
+                  {completedTodayCount >= totalGoals 
                     ? "All goals completed! 🎉" 
                     : `${completedTodayCount} of ${totalGoals} completed today`}
                 </p>
@@ -111,11 +116,11 @@ const Dashboard: React.FC<DashboardProps> = ({ entries, onAddEntry, onViewStats,
             {completedTodayCount < totalGoals && (
               <div className="text-xs font-medium text-indigo-100 flex items-center gap-1.5 bg-white/10 p-2 rounded-lg backdrop-blur-sm">
                 <Circle size={12} />
-                <span>Next up: {goals.find(g => !todayEntry?.completedGoalIds?.includes(g.id))?.text || "Keep going!"}</span>
+                <span>Next up: {goals.find(g => !completedGoalIds.has(g.id))?.text || "Keep going!"}</span>
               </div>
             )}
             
-            {completedTodayCount === totalGoals && totalGoals > 0 && (
+            {completedTodayCount >= totalGoals && totalGoals > 0 && (
                <div className="text-xs font-medium text-indigo-100 flex items-center gap-1.5 bg-white/10 p-2 rounded-lg backdrop-blur-sm">
                 <CheckCircle2 size={12} />
                 <span>You're crushing it!</span>
